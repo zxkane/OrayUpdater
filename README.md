@@ -12,14 +12,19 @@ Automatically register current IP to dynamic DNS service hosted on oray.com
 > 
 > 
 > optional arguments:
->   -h, --help            show this help message and exit
->   -f, --force           force updating IP address of ddns
+> 
+>   -h, --help            *show this help message and exit*
+>   
+>   -f, --force           *force updating IP address of ddns*
+>   
 >   -s HOSTNAME, --hostname HOSTNAME
->                         hostname to be updated
+>                         *hostname to be updated*
+>                         
 >   -u USERNAME, --username USERNAME
->                         username of Oray.com
+>                         *username of Oray.com*
+>                         
 >   -p PASSWORD, --password PASSWORD
->                         password of Oray.com
+>                         *password of Oray.com*
 
 * Create a **.orayupdater.cfg** file in your home directory, write your hostname, username and password in it. For example,
 
