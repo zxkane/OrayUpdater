@@ -21,7 +21,7 @@ try:
 except ImportError:
     import configparser
 
-CONFIG_LASTIP = u'.orayupdater_last'
+CONFIG_LASTIP = '.orayupdater_last'
 IP_PATTERN = r'(?P<ip>((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}(2[0-4][0-9]|25[0-5]|1[0-9]{2}|[1-9][0-9]|[0-9])))'
 
 def _getLastIP():
@@ -54,15 +54,15 @@ def _loadConf():
     
 
 SERVICE_STATUS = {
-'good': u'更新成功',
-'nochg': u'更新成功，但没有改变IP。',
-'notfqdn': u'未有激活花生壳的域名',
-'nohost':  u'域名不存在或未激活花生壳',
-'abuse':  u'请求失败，频繁请求或验证失败',
-'badauth':  u'验证失败，用户名或密码错误',
-'badagent': u'请求的User-Agent不合法',
-'!donator': u'此功能需要付费用户才能使用，如https',
-'911': u'系统错误',
+'good': 'Update successfully',
+'nochg': 'Update successfully, but IP is not changed',
+'notfqdn': 'This account does not have active oray domain',
+'nohost': 'Domain does not exist or inactive oray domain',
+'abuse': 'Request failed，abuse or authentication failure',
+'badauth': 'Authenticating failed，incorrect username or password',
+'badagent': 'Illegal User-Agent',
+'!donator': 'The features only are available for paid users，such as https',
+'911': 'Oray internal error',
 }
 
 class C(object):
@@ -93,14 +93,14 @@ if not c.HOSTNAME or not c.USERNAME or not c.PASSWORD:
 output = urllib2.urlopen("http://ddns.oray.com/checkip").read()
 rt = re.search(IP_PATTERN, output)
 if rt is None:
-    print u'Looks like checkip service is down. Or your Internet connection is down.'
+    print 'Looks like checkip service is down. Or your Internet connection is down.'
 else:
     currentIP = rt.group('ip')
     lastIP = _getLastIP()
     if lastIP != currentIP or c.FORCE:
         print u"Will register %s for host %s" %(currentIP, c.HOSTNAME)
         conn = httplib.HTTPConnection("ddns.oray.com")
-        passcode = u'%s:%s' %(c.USERNAME, c.PASSWORD)
+        passcode = '%s:%s' %(c.USERNAME, c.PASSWORD)
         headers = {"Authorization": "Basic %s" %(base64.b64encode(passcode.encode('ascii'))),
             "User-Agent": "Oray"}
         conn.request("GET", "/ph/update?hostname=%s&myip=%s" %(c.HOSTNAME, currentIP), headers=headers)
@@ -109,14 +109,14 @@ else:
             data = response.read()
             statusCode = data.split()[0]
             if statusCode in SERVICE_STATUS:
-                print SERVICE_STATUS.get(statusCode)
                 if statusCode == 'good' or statusCode == 'nochg':
                     _rememberLastIP(currentIP)
+                print SERVICE_STATUS.get(statusCode)
             else:
                 print data
         else:
-            print u'网络错误 %s: %s' %(response.status, response.reason)
+            print 'Network error %s: %s' %(response.status, response.reason)
         conn.close()
     else:
-        print u'%s 已经注册到 %s。' %(currentIP, c.HOSTNAME)
+        print '%s has been associated with domain %s。' %(currentIP, c.HOSTNAME)
     
